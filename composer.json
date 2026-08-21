@@ -1,0 +1,73 @@
+{
+    "name": "salioudiabate/select",
+    "description": "A soft, modern select/combobox kit for Livewire — single, searchable, async and multi-select, one design system, zero build step, and safe to render inside a Modal (github.com/salioudiabate/modal) dialog out of the box.",
+    "keywords": [
+        "laravel",
+        "livewire",
+        "select",
+        "combobox",
+        "multiselect",
+        "dropdown",
+        "ui"
+    ],
+    "homepage": "https://github.com/salioudiabate/select",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Saliou Diabate",
+            "email": "saliou.diiabate@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "livewire/livewire": "^3.0|^4.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+        "pestphp/pest-plugin-livewire": "^3.0|^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Salioudiabate\\Select\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Salioudiabate\\Select\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "test-coverage": "pest --coverage",
+        "analyse": "phpstan analyse",
+        "format": "pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Salioudiabate\\Select\\SelectServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
