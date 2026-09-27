@@ -5,6 +5,12 @@ All notable changes to `salioudiabate/select` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-09-27
+
+### Fixed
+
+- `wire:model.live` (including `.live.debounce.*`) is now honored on both `<x-select::select>` and `<x-select::multi>`: the value was always entangled deferred, so a live select only reached the server on the next request and anything depending on it (a cascade, a computed option list) did not re-render when it changed. Plain `wire:model` stays deferred.
+
 ## [1.0.0] - 2026-08-21
 
 ### Added

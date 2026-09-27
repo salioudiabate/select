@@ -32,6 +32,13 @@
     $searchable = $searchable || $creatable;
 
     $wireModel = $attributes->whereStartsWith('wire:model')->first();
+
+    // Carries the `.live` modifier of wire:model over to @entangle: without it the entangled
+    // value is always deferred, so `wire:model.live` would only reach the server on the next
+    // request and nothing depending on the value (a cascade, a computed option list) would
+    // re-render when it changes.
+    $wireModelLive = collect(array_keys($attributes->whereStartsWith('wire:model')->getAttributes()))
+        ->contains(fn (string $key) => str_contains($key, '.live'));
     $panelId = 'select-multi-panel-' . \Illuminate\Support\Str::slug($wireModel ?? \Illuminate\Support\Str::random(6));
 
     // See select.blade.php for the same auto-resolution against $errors.
@@ -56,7 +63,7 @@
             optionDescription: {{ Illuminate\Support\Js::from($optionDescription) }},
             creatable: {{ Illuminate\Support\Js::from($creatable) }},
             createMethod: {{ Illuminate\Support\Js::from($createMethod) }},
-            selectedValues: @entangle($wireModel),
+            selectedValues: @entangle($wireModel){{ $wireModelLive ? '.live' : '' }},
         })"
         class="select-trigger-wrapper"
         x-ref="triggerWrapper"
