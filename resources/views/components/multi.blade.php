@@ -82,7 +82,7 @@
             class="select-trigger {{ $error ? 'select-trigger-error' : '' }}"
             x-bind:class="{ 'select-trigger-open': isOpen }"
         >
-            <span class="select-trigger__value" x-bind:class="{ 'select-trigger__value-empty': selectedValues.length === 0 }" x-text="summaryText({{ Illuminate\Support\Js::from($placeholder) }})"></span>
+            <span class="select-trigger__value select-trigger__value-summary" x-bind:class="{ 'select-trigger__value-empty': selectedValues.length === 0 }" x-text="summaryText({{ Illuminate\Support\Js::from($placeholder) }})"></span>
 
             <span class="select-trigger__actions">
                 <span x-show="selectedValues.length > 0" x-cloak class="select-badge-count" x-text="selectedValues.length"></span>

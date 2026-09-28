@@ -5,6 +5,12 @@ All notable changes to `salioudiabate/select` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-09-28
+
+### Changed
+
+- `<x-select::multi>` shows the selected labels in its trigger (« A, C, D », ellipsized when long) instead of a bare count once more than one option is selected; the count badge stays next to it. Falls back to the count when no selected value matches a loaded option.
+
 ## [1.0.1] - 2026-09-27
 
 ### Fixed

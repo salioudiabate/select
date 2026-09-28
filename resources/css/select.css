@@ -143,6 +143,8 @@
 .select-trigger__value { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: .375rem; overflow: hidden; }
 .select-trigger__value span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .select-trigger__value-empty { color: var(--select-text-3); }
+/* Multi-select: the comma-separated labels on one line, cut with an ellipsis. */
+.select-trigger__value-summary { display: block; white-space: nowrap; text-overflow: ellipsis; }
 
 .select-trigger__actions { display: flex; align-items: center; gap: .25rem; flex-shrink: 0; }
 

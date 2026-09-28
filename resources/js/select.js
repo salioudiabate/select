@@ -553,19 +553,23 @@
         this.selectedValues = this.selectedValues.concat([option[this.optionValue]]);
       },
 
+      // The selected labels, comma-separated (the trigger ellipsizes a long list and the count
+      // badge sits next to it) — a bare count said how many, never which. Falls back to the
+      // count when no selected value matches a loaded option.
       summaryText: function (noneLabel) {
         var count = this.selectedValues.length;
 
         if (count === 0) return noneLabel;
-        if (count === 1) {
-          var opt = this.allOptions.find(function (o) {
-            return o[this.optionValue] === this.selectedValues[0];
-          }.bind(this));
 
-          return opt ? opt[this.optionLabel] : '1';
-        }
+        var labels = this.selectedValues
+          .map(function (value) {
+            var opt = this.allOptions.find(function (o) { return o[this.optionValue] === value; }.bind(this));
 
-        return String(count);
+            return opt ? opt[this.optionLabel] : null;
+          }.bind(this))
+          .filter(function (label) { return label !== null && label !== undefined && label !== ''; });
+
+        return labels.length > 0 ? labels.join(', ') : String(count);
       },
     });
   }

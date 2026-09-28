@@ -265,7 +265,7 @@ describe('selectMulti()', () => {
     expect(component.options).toEqual([{ value: '2', label: 'Bob' }]);
   });
 
-  it('summaryText() reports the count once more than one option is selected', () => {
+  it('summaryText() lists the selected labels, not just how many', () => {
     const { selectMulti } = loadSelect();
     const component = makeComponent(selectMulti, { options: OPTIONS, selectedValues: [] });
     component.init();
@@ -276,6 +276,15 @@ describe('selectMulti()', () => {
     expect(component.summaryText('None selected')).toBe('Alice');
 
     component.selectedValues = ['1', '2'];
+    expect(component.summaryText('None selected')).toBe('Alice, Bob');
+  });
+
+  it('summaryText() falls back to the count when no selected value matches a loaded option', () => {
+    const { selectMulti } = loadSelect();
+    const component = makeComponent(selectMulti, { options: OPTIONS, selectedValues: [] });
+    component.init();
+
+    component.selectedValues = ['unknown-1', 'unknown-2'];
     expect(component.summaryText('None selected')).toBe('2');
   });
 });
