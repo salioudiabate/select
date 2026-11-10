@@ -362,11 +362,27 @@
       },
 
       setSelectedOption: function (option) {
+        var hadQuery = this.searchQuery !== '';
+
         this.selectedOption = option;
         this.selectedValue = option[this.optionValue];
         this.closeDropdown();
         this.searchQuery = '';
-        this.options = this.allOptions;
+
+        if (!this.async) {
+          this.options = this.allOptions;
+
+          return;
+        }
+
+        // Async options come from the server, so allOptions is empty: resetting to
+        // it left an empty list, and with the preload already spent, no way to pick
+        // anything else. Unfiltered results are still the right list for the
+        // now-empty search box; filtered ones are dropped and fetched again on open.
+        if (hadQuery) {
+          this.options = [];
+          this._hasPreloaded = false;
+        }
       },
 
       clearSelection: function () {
