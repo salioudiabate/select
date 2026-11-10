@@ -453,6 +453,42 @@ describe('select(): preload on open (async)', () => {
     expect(call).not.toHaveBeenCalled();
   });
 
+  it('still lists the preloaded options after a selection, so the choice can be changed', async () => {
+    const results = [{ value: '9', label: 'Zed' }, { value: '8', label: 'Yan' }];
+    const { select } = loadSelect({ livewire: { dispatch: vi.fn() } });
+    const component = makeComponent(select, { async: true, searchMethod: 'search' });
+    component.$wire.call = vi.fn().mockResolvedValue(results);
+    component.init();
+
+    component.openDropdown();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    component.setSelectedOption(results[0]);
+    component.openDropdown();
+
+    expect(component.selectedValue).toBe('9');
+    expect(component.options).toEqual(results);
+  });
+
+  it('fetches the unfiltered list again on open after selecting from a search', async () => {
+    const call = vi.fn().mockResolvedValue([{ value: '9', label: 'Zed' }]);
+    const { select } = loadSelect({ livewire: { dispatch: vi.fn() } });
+    const component = makeComponent(select, { async: true, searchMethod: 'search' });
+    component.$wire.call = call;
+    component.init();
+
+    component.openDropdown();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    component.searchQuery = 'ze';
+    component.setSelectedOption({ value: '9', label: 'Zed' });
+    call.mockClear();
+
+    component.openDropdown();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(call).toHaveBeenCalledWith('search', '');
+    expect(component.options).toEqual([{ value: '9', label: 'Zed' }]);
+  });
+
   it('does not preload when :preload="false"', async () => {
     const call = vi.fn().mockResolvedValue([]);
     const { select } = loadSelect({ livewire: { dispatch: vi.fn() } });
