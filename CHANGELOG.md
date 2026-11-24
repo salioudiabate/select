@@ -5,6 +5,12 @@ All notable changes to `salioudiabate/select` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-11-24
+
+### Fixed
+
+- `<x-select::select>` and `<x-select::multi>` pick up a new option list sent by the server. The options were read once, when Alpine initialized the select, and Livewire's morph keeps that state, so a cascade (a company, then its stations) or any computed option list stayed on the first list: the dropdown showed the stale options and search filtered them, or an empty list. The field is now keyed on its options and re-created when they change.
+
 ## [1.0.4] - 2026-11-10
 
 ### Changed

@@ -59,7 +59,10 @@
     }
 @endphp
 
-<div {{ $attributes->except('id')->class('select-field') }}>
+{{-- Keyed on the options: x-data reads them once, at Alpine init, and Livewire's morph keeps that
+     state, so a new list from the server (a cascade, a computed option list) would never be seen and
+     search would keep filtering the stale one. A new key makes the morph re-create the select instead. --}}
+<div wire:key="{{ $panelId }}-{{ md5(json_encode($options)) }}" {{ $attributes->except('id')->class('select-field') }}>
     @if ($label)
         <label for="{{ $panelId }}-trigger" class="select-label {{ $required ? 'select-label-required' : '' }}">{{ $label }}</label>
     @endif
