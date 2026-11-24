@@ -125,15 +125,24 @@
     return String(value).replace(/["\\]/g, '\\$&');
   }
 
+  /**
+   * Case- and accent-insensitive form of a label or query: "Côte d'Ivoire"
+   * and "cote d'ivoire" compare equal. NFD splits each accented letter into
+   * its base letter plus a combining mark, and the marks are then dropped.
+   */
+  function normalizeText(value) {
+    return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
   function matchesQuery(option, labelKey, query) {
-    return String(option[labelKey]).toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    return normalizeText(option[labelKey]).indexOf(normalizeText(query)) !== -1;
   }
 
   function existsWithLabel(options, labelKey, query) {
-    var normalized = query.toLowerCase();
+    var normalized = normalizeText(query);
 
     return options.some(function (option) {
-      return String(option[labelKey]).toLowerCase() === normalized;
+      return normalizeText(option[labelKey]) === normalized;
     });
   }
 
@@ -469,7 +478,7 @@
 
         var buffer = this._typeaheadBuffer;
         var match = this.options.find(function (option) {
-          return String(option[this.optionLabel]).toLowerCase().indexOf(buffer) === 0;
+          return normalizeText(option[this.optionLabel]).indexOf(buffer) === 0;
         }.bind(this));
 
         if (!match) return;

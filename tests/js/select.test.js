@@ -110,6 +110,26 @@ describe('select(): client-side search', () => {
     expect(component.options).toEqual([{ value: '1', label: 'Alice' }]);
   });
 
+  it('onSearchInput() ignores accents and case, in the query and in the labels', () => {
+    const { select } = loadSelect();
+    const options = [
+      { value: 'ci', label: "Côte d'Ivoire" },
+      { value: 'sn', label: 'Sénégal' },
+      { value: 'ml', label: 'Mali' },
+    ];
+    const component = makeComponent(select, { options });
+    component.init();
+
+    component.onSearchInput('cote');
+    expect(component.options).toEqual([options[0]]);
+
+    component.onSearchInput('SENEGAL');
+    expect(component.options).toEqual([options[1]]);
+
+    component.onSearchInput('mäli');
+    expect(component.options).toEqual([options[2]]);
+  });
+
   it('setSelectedOption() restores the full option list and clears the query', () => {
     const { select } = loadSelect();
     const component = makeComponent(select, { options: OPTIONS });
@@ -265,6 +285,21 @@ describe('selectMulti()', () => {
     expect(component.options).toEqual([{ value: '2', label: 'Bob' }]);
   });
 
+  it('onSearchInput() ignores accents and case', () => {
+    const { selectMulti } = loadSelect();
+    const options = [
+      { value: 'a', label: 'Abidjan' },
+      { value: 'y', label: 'Yamoussoukro' },
+      { value: 'e', label: 'Électricité' },
+    ];
+    const component = makeComponent(selectMulti, { options, selectedValues: [] });
+    component.init();
+
+    component.onSearchInput('electricite');
+
+    expect(component.options).toEqual([options[2]]);
+  });
+
   it('summaryText() lists the selected labels, not just how many', () => {
     const { selectMulti } = loadSelect();
     const component = makeComponent(selectMulti, { options: OPTIONS, selectedValues: [] });
@@ -353,6 +388,18 @@ describe('select(): typeahead on the plain (non-searchable) variant', () => {
 
     expect(component.openedWithKeyboard).toBe(true);
     expect(document.activeElement.getAttribute('data-option-value')).toBe('2'); // Bob
+  });
+
+  it('matches a label starting with an accented letter', () => {
+    const { select } = loadSelect();
+    const options = [{ value: '1', label: 'Abidjan' }, { value: '2', label: 'État' }];
+    const component = makeComponent(select, { options, searchable: false });
+    component.init();
+    panelWithOptions(component, options);
+
+    component.onTypeahead('e');
+
+    expect(document.activeElement.getAttribute('data-option-value')).toBe('2'); // État
   });
 
   it('accumulates consecutive keystrokes into one buffer', () => {
@@ -529,6 +576,9 @@ describe('select(): creatable', () => {
     expect(component.canCreate()).toBe(false); // empty query
 
     component.searchQuery = 'alice'; // case-insensitive exact match
+    expect(component.canCreate()).toBe(false);
+
+    component.searchQuery = 'Alicé'; // accent-insensitive exact match
     expect(component.canCreate()).toBe(false);
 
     component.searchQuery = 'Zed';

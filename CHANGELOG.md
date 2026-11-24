@@ -5,6 +5,12 @@ All notable changes to `salioudiabate/select` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-24
+
+### Changed
+
+- Client-side search ignores accents as well as case, on `<x-select::select>` and `<x-select::multi>`: « cote » finds « Côte d'Ivoire », « electricite » finds « Électricité ». The same comparison applies to the creatable « already exists » check and to typeahead on the plain select (typing « e » reaches « État »). Async search is unchanged: the query still goes to your `search-method` as typed.
+
 ## [1.0.5] - 2026-11-24
 
 ### Fixed
